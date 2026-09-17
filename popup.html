@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Vault</title>
+<link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">VAULT</span>
+    </div>
+    <button id="lockBtn" class="icon-btn hidden" title="Lock now">Lock</button>
+  </header>
+
+  <div class="tumblers" aria-hidden="true"></div>
+
+  <!-- FIRST RUN: create a master password -->
+  <main id="screen-setup" class="screen">
+    <p class="lede">This is your first time opening Vault. Choose a master password — it encrypts everything below, and it's never stored anywhere. If you forget it, your saved credentials can't be recovered.</p>
+    <label class="field">
+      <span>Master password</span>
+      <input type="password" id="setupPass" autocomplete="new-password" />
+    </label>
+    <label class="field">
+      <span>Confirm password</span>
+      <input type="password" id="setupPassConfirm" autocomplete="new-password" />
+    </label>
+    <p id="setupError" class="error hidden"></p>
+    <button id="setupBtn" class="primary-btn">Create vault</button>
+  </main>
+
+  <!-- RETURNING: unlock with master password -->
+  <main id="screen-unlock" class="screen hidden">
+    <p class="lede">Enter your master password to unlock.</p>
+    <label class="field">
+      <span>Master password</span>
+      <input type="password" id="unlockPass" autocomplete="current-password" />
+    </label>
+    <p id="unlockError" class="error hidden"></p>
+    <button id="unlockBtn" class="primary-btn">Unlock</button>
+    <label class="stay-unlocked">
+      <input type="checkbox" id="staySignedIn" checked />
+      <span>Keep unlocked for 15 minutes</span>
+    </label>
+  </main>
+
+  <!-- UNLOCKED: the vault itself -->
+  <main id="screen-vault" class="screen hidden">
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Search sites…" />
+      <button id="addBtn" class="icon-btn accent" title="Add credential">+</button>
+    </div>
+
+    <ul id="credList" class="cred-list"></ul>
+    <p id="emptyState" class="empty hidden">No credentials saved yet. Tap + to add one.</p>
+  </main>
+
+  <!-- ADD / EDIT form, overlays vault screen -->
+  <div id="screen-form" class="screen form-screen hidden">
+    <div class="tumblers" aria-hidden="true"></div>
+    <label class="field">
+      <span>Site or app</span>
+      <input type="text" id="formSite" placeholder="e.g. github.com" />
+    </label>
+    <label class="field">
+      <span>Username or email</span>
+      <input type="text" id="formUser" autocomplete="off" />
+    </label>
+    <label class="field">
+      <span>Password</span>
+      <div class="pw-input-row">
+        <input type="password" id="formPassword" autocomplete="off" />
+        <button type="button" id="togglePwVisibility" class="icon-btn small">show</button>
+        <button type="button" id="toggleGenerator" class="icon-btn small">generate</button>
+      </div>
+    </label>
+
+    <div id="generatorPanel" class="generator-panel hidden">
+      <div id="genPreview" class="gen-preview"></div>
+      <div class="gen-row">
+        <span>Length</span>
+        <input type="range" id="genLength" min="8" max="32" value="16" />
+        <span id="genLengthValue" class="gen-length-value">16</span>
+      </div>
+      <div class="gen-checks">
+        <label><input type="checkbox" id="genUpper" checked /> A-Z</label>
+        <label><input type="checkbox" id="genLower" checked /> a-z</label>
+        <label><input type="checkbox" id="genNumbers" checked /> 0-9</label>
+        <label><input type="checkbox" id="genSymbols" checked /> #$%</label>
+      </div>
+      <div class="gen-actions">
+        <button type="button" id="genRefreshBtn" class="ghost-btn small-btn">↻ Regenerate</button>
+        <button type="button" id="genUseBtn" class="primary-btn small-btn">Use this password</button>
+      </div>
+    </div>
+    <label class="field">
+      <span>Notes <em>(optional)</em></span>
+      <textarea id="formNotes" rows="2"></textarea>
+    </label>
+    <div class="form-actions">
+      <button id="deleteBtn" class="danger-btn hidden">Delete</button>
+      <button id="cancelFormBtn" class="ghost-btn">Cancel</button>
+      <button id="saveBtn" class="primary-btn">Save</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="crypto.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
